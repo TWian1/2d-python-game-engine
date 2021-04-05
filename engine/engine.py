@@ -10,6 +10,7 @@ def inititializeboard(height, width, startcolor):
   board.writelines(boardcopy)
 
 def start():
+  clearpixelsprites()
   settings = json.loads(open('engine/settings.json', 'r').read())
   clearmsg = ['cls', 'clear'][int(input("Linux(1) or Microsoft(0)?"))]
   change = open('engine/settings.json', 'r').readlines()
@@ -35,3 +36,63 @@ def colorpixel(x, y, color):
 def clearscreen():
   settings = json.loads(open('engine/settings.json', 'r').read())
   os.system(settings["OS"])
+
+def clearpixelsprites(): open('engine/data/pixelsprites.txt', 'w')
+
+def newpixelsprite(x, y, color, name):
+  pixelsprites = open('engine/data/pixelsprites.txt', 'r').readlines()
+  for a in pixelsprites:
+    name2 = ""
+    space = True
+    for b in a:
+      if b == " ": space = False
+      if space: name2 += b
+    if name2 == name: return
+  pixelspriteswrite = open('engine/data/pixelsprites.txt', 'w')
+  pixelsprites.append(name + " " + color + " " + str(x) + " " + str(y) + "\n")
+  pixelspriteswrite.writelines(pixelsprites)
+  colorpixel(x, y, color)
+
+def checkforsprites(inpname):
+  pixelsprites = open('engine/data/pixelsprites.txt', 'r').readlines()
+  names = []
+  for a in pixelsprites:
+    name = ""
+    space = True
+    for b in a:
+      if b == " ": space = False
+      if space: name += b
+    names.append(name)
+  if inpname in names: return True
+  else: return False
+
+def indexsprite(inpname):
+  pixelsprites = open('engine/data/pixelsprites.txt', 'r').readlines()
+  counter = -1
+  for a in pixelsprites:
+    counter +=1
+    name = ""
+    space = True
+    for b in a:
+      if b == " ": space = False
+      if space: name += b
+    if name == inpname: return counter
+    
+
+def changepscolor(name, color):
+  pixelsprites = open('engine/data/pixelsprites.txt', 'r').readlines()
+  if checkforsprites(name):
+    spaces = 0
+    tempx = ""
+    tempy = ""
+    for a in pixelsprites[indexsprite(name)]:
+      if a == " ":
+        spaces+=1
+      else:
+        if spaces == 4:
+          tempx += a
+        if spaces == 5:
+          tempy += a
+    pixelsprites[indexsprite(name)] = name + " "+ color + " " + tempx + " " + tempy
+    open('engine/data/pixelsprites.txt', 'w').writelines(pixelsprites)
+    colorpixel(int(tempx), int(tempy), color)
