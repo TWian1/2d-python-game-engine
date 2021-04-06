@@ -139,3 +139,7 @@ def moveps(name, x, y, ofx, ofy):
     pixelsprites[indexsprte] = name + " " + data.colors[indexsprte] + " " + str(index) + " " + str(indey)
     open('engine/data/pixelsprites.txt', 'w').writelines(pixelsprites)
     colorpixel(oldposx, oldposy, "0 0 0")
+def textinput(Question):
+  a = input("\n" + Question)
+  print("\n")
+  return a
