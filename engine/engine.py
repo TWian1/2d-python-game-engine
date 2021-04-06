@@ -1,5 +1,6 @@
 import os
 import json
+import time
 def inititializeboard(height, width, startcolor):
   boardcopy = []
   for a in range(height):
@@ -117,3 +118,24 @@ def changepscolor(name, color):
           tempy += a
     pixelsprites[indexsprite(name)] = name + " "+ color + " " + tempx + " " + tempy
     open('engine/data/pixelsprites.txt', 'w').writelines(pixelsprites)
+
+def wait(seconds):
+  time.sleep(seconds)
+
+def moveps(name, x, y, ofx, ofy):
+  if checkforsprites(name):
+    pixelsprites = open('engine/data/pixelsprites.txt', 'r').readlines()
+    index = 0
+    data = getpixeldata()
+    indexsprte = indexsprite(name)
+    oldposx = data.xs[indexsprte]
+    oldposy = data.ys[indexsprte]
+    if x == -1 and y == -1:
+      index = data.xs[indexsprte] + ofx
+      indey = data.ys[indexsprte] + ofy
+    else:
+      index = x
+      indey = y
+    pixelsprites[indexsprte] = name + " " + data.colors[indexsprte] + " " + str(index) + " " + str(indey)
+    open('engine/data/pixelsprites.txt', 'w').writelines(pixelsprites)
+    colorpixel(oldposx, oldposy, "0 0 0")
