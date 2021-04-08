@@ -1,5 +1,4 @@
 #Dont touch
-from engine.engine import wait, start, colorpixel, clearscreen, refresh, textinput, ps
-
-
+from engine.engine import ps, general, inpt, pixel
+general.start()
 # Type Code Here ↓↓↓↓↓
