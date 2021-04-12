@@ -1,6 +1,25 @@
 import os
 import json
-import time
+import time as t
+class settings:
+  def screensize(x, y):
+    settings = open('engine/settings.json', 'r').readlines()
+    settings[1] = " \"GameHeight\": \"" + str(y) + "\",\n"
+    settings[2] = " \"GameWidth\": \"" + str(x) + "\",\n"
+    open('engine/settings.json', 'w').writelines(settings)
+    settings2 = json.loads(open('engine/settings.json', 'r').read())
+    notouch.inititializeboard(int(settings2["GameHeight"]), int(settings2["GameWidth"]), settings2["BoardStartColor"])
+  def startingcolor(color):
+    settings = open('engine/settings.json', 'r').readlines()
+    settings[3] = " \"BoardStartColor\": \"" + color + "\",\n"
+    open('engine/settings.json', 'w').writelines(settings)
+    settings2 = json.loads(open('engine/settings.json', 'r').read())
+    notouch.inititializeboard(int(settings2["GameHeight"]), int(settings2["GameWidth"]), settings2["BoardStartColor"])
+class time:
+  def sleep(seconds):
+    t.sleep(seconds)
+  def time():
+    return t.time()
 class notouch:
   def inititializeboard(height, width, startcolor):
     boardcopy = []
@@ -8,8 +27,7 @@ class notouch:
       for b in range(width):
         boardcopy.append(startcolor + "\n")
       boardcopy.append("line\n")
-    board = open("engine/ImageProcessing/image.txt", 'w')
-    board.writelines(boardcopy)
+    open("engine/ImageProcessing/image.txt", 'w').writelines(boardcopy)
   def checkifsprite(inpname):
     data = ps.getdata()
     if inpname in data.names: return True
@@ -24,6 +42,13 @@ class notouch:
 
 class general:
   def start():
+
+    settings2 = open('engine/settings.json', 'r').readlines()
+    settings2[1] = " \"GameHeight\": \"20\",\n"
+    settings2[2] = " \"GameWidth\": \"20\",\n"
+    settings2[3] = " \"BoardStartColor\": \"0 0 0\",\n"
+    open('engine/settings.json', 'w').writelines(settings2)
+
     ps.clear()
     settings = json.loads(open('engine/settings.json', 'r').read())
     clearmsg = ['cls', 'clear'][int(input("Linux(1) or Microsoft(0)?"))]
@@ -41,10 +66,6 @@ class general:
     settings = json.loads(open('engine/settings.json', 'r').read())
     os.system(settings["OS"])
 
-
-  def wait(seconds):
-    time.sleep(seconds)
-
 class inpt:
   
   def text(Question):
@@ -53,6 +74,10 @@ class inpt:
     return a
 
 class pixel:
+  def colorfill(xpos, ypos, width, length, color):
+    for a in range(length):
+      for b in range(width):
+        pixel.color(xpos + b, ypos + a, color)
   def color(x, y, color):
     settings = json.loads(open('engine/settings.json', 'r').read())
     imagefilecopy = open('engine/ImageProcessing/image.txt', 'r').readlines()
@@ -83,7 +108,7 @@ class ps:
     if notouch.checkifsprite(name):
       pixelsprites = open('engine/data/pixelsprites.txt', 'r').readlines()
       index = 0
-      data = notouch.getdata()
+      data = ps.getdata()
       indexsprte = ps.index(name)
       oldposx = data.xs[indexsprte]
       oldposy = data.ys[indexsprte]
